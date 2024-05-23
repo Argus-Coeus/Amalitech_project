@@ -9,8 +9,6 @@ class PostSerializer(serializers.ModelSerializer):
         model = Video
 
 class UserSerializer(serializers.ModelSerializer):
-    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Video.objects.all())
-
     class Meta:
         model = User
-        fields = ['id', 'username', 'snippets']
+        fields = ['id', 'username','is_staff','is_active']
