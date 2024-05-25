@@ -4,7 +4,8 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 
 class Video(models.Model):
-    author = models.ForeignKey(User,on_delete=models.CASCADE)
+    author   = models.ForeignKey(User,on_delete=models.CASCADE)
+    right   = User.is_staff
     title = models.CharField(max_length=100)
     description = models.TextField()
     Video_file = models.FileField(upload_to='uploads/video_files',validators=[FileExtensionValidator(allowed_extensions=['mp4'])])
