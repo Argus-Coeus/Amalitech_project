@@ -9,14 +9,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-
-
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'create': reverse('create', request=request, format=format),
-        'users': reverse('users-list', request=request, format=format),
-        'Listing': reverse('listing', request=request, format=format)
+        'Create a video ': reverse('create', request=request, format=format),
+        'Listing video Upload': reverse('listing', request=request, format=format),
+        'Listing users': reverse('users-list', request=request, format=format),
+        'Token Generator': reverse('token_obtain_pair', request=request, format=format),
+        'Token Refresh': reverse('token_refresh', request=request, format=format),
+        'Account Register': reverse('auth_register', request=request, format=format),
+
     })
 
 class CreateList(generics.CreateAPIView):
