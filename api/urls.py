@@ -8,5 +8,5 @@ urlpatterns = [
     path('vd/<int:pk>/', PostDetail.as_view(),name='create-view'),
     path('users/', UserList.as_view(),name='users-list'),
     path('users/<int:pk>/', UserDetail.as_view(),name='users-listing'),
-    path('doc/',PostList.as_view(),name='documentation'),
+    
 ]
