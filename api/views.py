@@ -18,6 +18,7 @@ def api_root(request, format=None):
         'Token Generator': reverse('token_obtain_pair', request=request, format=format),
         'Token Refresh': reverse('token_refresh', request=request, format=format),
         'Account Register': reverse('auth_register', request=request, format=format),
+        'Account LOgout': reverse('auth_logout', request=request, format=format),
 
     })
 

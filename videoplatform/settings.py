@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'accounts',
     'auths',
     'rest_framework_simplejwt.token_blacklist',
+    'crispy_forms',
     
 ]
 
@@ -49,7 +50,7 @@ ROOT_URLCONF = 'videoplatform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,6 +122,8 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
