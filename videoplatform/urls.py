@@ -10,5 +10,6 @@ urlpatterns = [
     path('api-auth/',include('api.urls')),
     path('auth/', include('auths.urls')),
     path('account/', include('accounts.urls')),
-    path('api/docs/', include_docs_urls(title='Video API'))
+    path('api/docs/', include_docs_urls(title='Video API')),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]

@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'auths',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',
+    'django_rest_passwordreset',
     
 ]
 
@@ -139,3 +140,12 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+
+# Email Backend Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
+
+EMAIL_PORT = 587  # Replace with your email port
+EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
+EMAIL_HOST = 'your_email_host'  # Replace with your email host for gmail -> 'smtp.gmail.com'
+EMAIL_HOST_USER = 'your_email_username'  # Replace with your email username
+EMAIL_HOST_PASSWORD = 'your_email_pass'
