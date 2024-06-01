@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.urls import reverse_lazy
 from rest_framework import status
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 class LoginView(View):
@@ -48,41 +50,49 @@ class LogoutView(View):
 
 
 class SignView(View):
-    
     def get(self, request):
         return render(request, 'registration/signup.html')
 
+    def post(self, request):
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        api_url = f'http://127.0.0.1:8000/auth/register/'
+
+        data = {
+            "username": username,
+            "password": password,
+            "password2": confirm_password,
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name
+        }
+
+        print(data)
+        print(api_url)
+
+        response = requests.post(api_url,data)
+        print(response.json())
+        print(response.status_code)
+        if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
+            return redirect('login')
+        else:
+            errors = response.json()
+            for field, message in errors.items():
+                for message in message:
+                    messages.error(request,message)
+            return redirect('register')
 
 
 
+class ForgotPassword(View):
+    def get(self, request):
+        return render(request, 'registration/password_reset_form.html')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def post(self, request):
+        email = request.POST.get('email')
