@@ -1,23 +1,38 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate
+import requests
 from django.views import View
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponseRedirect
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from django.urls import reverse_lazy
+from rest_framework import status
+
 
 class LoginView(View):
+    # success_url = 
+
     def get(self, request):
         return render(request, 'registration/login.html')
 
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            response = JsonResponse({'access': str(refresh.access_token), 'refresh': str(refresh)})
-            response.set_cookie('access', str(refresh.access_token), httponly=True)
-            response.set_cookie('refresh', str(refresh), httponly=True)
-            return response
+        api_url = f'http://127.0.0.1:8000/auth/login/'  
+        data = {
+              'username': username,
+              'password': password,
+          }
+        response = requests.post(api_url,data)
+        if response.status_code == status.HTTP_200_OK:
+            users = response.json()
+#           print()
+            response = JsonResponse({'access': str(users['access']), 'refresh': str(users['refresh'])})
+            response.set_cookie('access', str(users['access']), httponly=True)
+            response.set_cookie('refresh', str(users['refresh']), httponly=True)
+            
+
+            return render(request, 'space.html', {'message': 'Hello'})
         else:
             return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
 
@@ -30,8 +45,6 @@ class LogoutView(View):
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response
-
-
 
 
 
