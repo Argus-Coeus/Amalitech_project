@@ -144,8 +144,9 @@ SIMPLE_JWT = {
 # Email Backend Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
 
-EMAIL_PORT = 587  # Replace with your email port
-EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
-EMAIL_HOST = 'your_email_host'  # Replace with your email host for gmail -> 'smtp.gmail.com'
-EMAIL_HOST_USER = 'your_email_username'  # Replace with your email username
-EMAIL_HOST_PASSWORD = 'your_email_pass'
+EMAIL_PORT = 465  # Replace with your email port
+EMAIL_USE_TLS = False  # Set to False if your email server doesn't use TLS
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
+EMAIL_HOST_USER = 'karthur0822@gmail.com'  # Replace with your email username
+EMAIL_HOST_PASSWORD = 'jjnt nwln dnpk asaa'
+EMAIL_USE_SSL = True

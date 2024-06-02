@@ -11,8 +11,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 
 
-class LoginView(View):
-    # success_url = 
+class LoginView(View): 
 
     def get(self, request):
         return render(request, 'registration/login.html')
@@ -96,3 +95,7 @@ class ForgotPassword(View):
 
     def post(self, request):
         email = request.POST.get('email')
+
+class ForgotPasswordConfirm(View):
+    def get(self, request):
+        return render(request, 'registration/password_reset_confirm.html')
