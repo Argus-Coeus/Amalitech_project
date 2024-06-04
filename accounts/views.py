@@ -71,9 +71,6 @@ class SignView(View):
             "last_name": last_name
         }
 
-        print(data)
-        print(api_url)
-
         response = requests.post(api_url,data)
         print(response.json())
         print(response.status_code)
@@ -95,7 +92,17 @@ class ForgotPassword(View):
 
     def post(self, request):
         email = request.POST.get('email')
+        api_url = f'http://127.0.0.1:8000/api/password_reset/'
 
+        data = {
+            "email": email
+        }
+        response = requests.post(api_url,data)
+        print(requests.post(api_url,data))
+        if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
+            return render(request, 'registration/password_reset_done.html')
+        
+        
 class ForgotPasswordConfirm(View):
     def get(self, request):
         return render(request, 'registration/password_reset_confirm.html')
