@@ -8,6 +8,10 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django_rest_passwordreset.views import ResetPasswordConfirm
+from django_rest_passwordreset.serializers import PasswordTokenSerializer
+from rest_framework import status
+
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -53,3 +57,12 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                       IsOwnerOrReadOnly]
+
+
+class CustomResetPasswordConfirmView(ResetPasswordConfirm):
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'detail': 'Password has been reset with the new password.'}, status=status.HTTP_200_OK)
+    

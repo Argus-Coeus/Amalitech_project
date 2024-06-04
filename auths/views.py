@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from .serializers import CustomPasswordResetConfirmSerializer
+
 
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
@@ -33,3 +35,9 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+class CustomPasswordResetConfirmView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = CustomPasswordResetConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'detail': 'Password has been reset with the new password.'}, status=status.HTTP_200_OK)

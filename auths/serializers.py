@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -51,3 +55,29 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+    
+
+class CustomPasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    new_password1 = serializers.CharField()
+    new_password2 = serializers.CharField()
+
+    def validate(self, attrs):
+        try:
+            uid = urlsafe_base64_decode(attrs['uid']).decode()
+            self.user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            raise serializers.ValidationError('Invalid UID')
+
+        if not default_token_generator.check_token(self.user, attrs['token']):
+            raise serializers.ValidationError('Invalid token')
+
+        if attrs['new_password1'] != attrs['new_password2']:
+            raise serializers.ValidationError('Passwords do not match')
+
+        return attrs
+
+    def save(self):
+        self.user.set_password(self.validated_data['new_password1'])
+        self.user.save()
