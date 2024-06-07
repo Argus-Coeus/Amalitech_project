@@ -32,8 +32,12 @@ class LoginView(View):
             response.set_cookie('access', str(users['access']), httponly=True)
             response.set_cookie('refresh', str(users['refresh']), httponly=True)
             
-
-            return render(request, 'space.html', {'message': 'Hello'})
+            if username == "admin" :
+                return render(request, 'admin.html', {'message': 'Hello'})
+            elif username == "api" :
+                return redirect('api')
+            else:
+                return render(request, 'space.html', {'message': 'Hello'})
         else:
             return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
 
@@ -118,3 +122,8 @@ class ForgotPasswordConfirm(View):
         response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return redirect('login')
+        
+
+class Upload(View):
+    def get(self, request):
+        return render(request, 'upload.html')

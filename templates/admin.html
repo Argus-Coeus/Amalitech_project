@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block style-nav %}
+<style>
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+    
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: white;
+    }
+    .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin: 16px auto;
+            width: 300px;
+            display: none;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+        }
+        .card h3 {
+            font-size: 1.2em;
+            margin: 0.5em 0;
+        }
+        .card p {
+            margin: 0.5em 0;
+        }
+        .card a {
+            display: block;
+            margin: 0.5em 0;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+        .card .date-posted {
+            font-size: 0.9em;
+            color: #777;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .navigation button {
+            padding: 10px 20px;
+            margin: 5px;
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+  <div class="topnav">
+    <a> Hi {{ user.username }}!</a>
+    <a class="active" href="#home">Home</a>
+    <a href="#contact">Upload</a>
+    <a href="#about">Logout</a>
+    <a href="{% url 'forgot-password' %}">Reset Password</a>
+    <a href="#about">About</a>
+  </div>
+  <p></p>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+<h2>Dashboard</h2>
+    <div id="message" class="message"></div>
+    <div id="video-container"></div>
+    <div class="navigation">
+        <button id="prev-btn" disabled>Previous</button>
+        <button id="next-btn" disabled>Next</button>
+    </div>
+   
+{% endblock %}
+
