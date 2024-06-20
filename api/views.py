@@ -36,12 +36,12 @@ class CreateList(generics.CreateAPIView):
 class PostList(generics.ListAPIView):
     queryset = Video.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
 
 class UserList(generics.ListAPIView):
@@ -57,7 +57,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CustomResetPasswordConfirmView(ResetPasswordConfirm):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = PasswordTokenSerializer(data=request.data)

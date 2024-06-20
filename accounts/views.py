@@ -4,7 +4,6 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 import requests
 from django.views import View
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from rest_framework.reverse import reverse
 from django.urls import reverse_lazy
@@ -12,7 +11,6 @@ from rest_framework import status
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import Http404
-from django.contrib.auth.decorators import login_required
 
 
 API_URL = 'http://127.0.0.1:8000/api/v1/vd/'  
@@ -87,9 +85,9 @@ class SignView(View):
             "last_name": last_name
         }
 
-        response = requests.post(api_url,data)
+        response = requests.post(api_url,data,headers=headers)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :
-            messages.success(request, f'Account created successfully. Verify {email}.')
+            messages.success(request, f'{username} account created successfully. Verify your {email} account before you can login.')
             return render(request, 'registration/login.html')
         else:
             errors = response.json()
