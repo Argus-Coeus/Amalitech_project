@@ -5,10 +5,8 @@ from django.shortcuts import render, redirect
 import requests
 from django.views import View
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse,HttpResponseRedirect
-from rest_framework.permissions import IsAuthenticated
+from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from rest_framework.reverse import reverse
-from rest_framework.views import APIView
 from django.urls import reverse_lazy
 from rest_framework import status
 from django.urls import reverse_lazy
@@ -55,6 +53,10 @@ class LoginView(View):
             response.set_cookie('refresh', users['refresh'], httponly=True)
             return response
         else:
+            errors = response.json()
+            for field, messages_list in errors.items():
+                for message in messages_list:
+                    messages.error(request, message)
             return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
         
 
@@ -87,7 +89,7 @@ class SignView(View):
 
         response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :
-            messages.success(request, f'{username} Account created successfully. Please verify in your email.')     
+            messages.success(request, f'Account created successfully. Verify {email}.')
             return render(request, 'registration/login.html')
         else:
             errors = response.json()

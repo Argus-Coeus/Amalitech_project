@@ -31,7 +31,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/auth/check-verification-status/.*$'),
             re.compile(r'^/api/v1/.*$'),
             re.compile(r'^/api/v1/reset/confirm/.*$'),
-            re.compile(r'^/auth/verify/MTg/.*$'),
+            re.compile(r'^/auth/verify/.*$'),
             re.compile(r'^/api/password_reset/.*$'),
             re.compile(r'^/reset-password-confirm/.*$'),
             re.compile(r'^/api/v1/reset/confirm/$'),
