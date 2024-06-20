@@ -3,27 +3,48 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from django.core.mail import send_mail
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
+from api.models import Profile
+from django.contrib.auth import authenticate
+from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
-        # Add custom claims
         token['username'] = user.username
         return token
 
+    def validate(self, attrs):
+        user = authenticate(username=attrs['username'], password=attrs['password'])
+        if user is not None:
+            if not user.profile.is_verified:
+                raise serializers.ValidationError("Account is not verified.")
+        else:
+            raise serializers.ValidationError("Invalid credentials.")
+
+        data = super().validate(attrs)
+        refresh_token = data.get('refresh')
+
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.check_blacklist()
+            except InvalidToken:
+                raise TokenError("Token is blacklisted or invalid")
+
+        return data
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
 
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -39,7 +60,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
-
         return attrs
 
     def create(self, validated_data):
@@ -49,35 +69,19 @@ class RegisterSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
         )
-
-        
         user.set_password(validated_data['password'])
         user.save()
 
+        # Create the associated Profile if it doesn't exist
+        Profile.objects.get_or_create(user=user)
+
+        # Send verification email
+        send_verification_email(user)
+        
         return user
+
+class LogoutSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
     
-
-class CustomPasswordResetConfirmSerializer(serializers.Serializer):
-    uid = serializers.CharField()
-    token = serializers.CharField()
-    new_password1 = serializers.CharField()
-    new_password2 = serializers.CharField()
-
     def validate(self, attrs):
-        try:
-            uid = urlsafe_base64_decode(attrs['uid']).decode()
-            self.user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            raise serializers.ValidationError('Invalid UID')
-
-        if not default_token_generator.check_token(self.user, attrs['token']):
-            raise serializers.ValidationError('Invalid token')
-
-        if attrs['new_password1'] != attrs['new_password2']:
-            raise serializers.ValidationError('Passwords do not match')
-
-        return attrs
-
-    def save(self):
-        self.user.set_password(self.validated_data['new_password1'])
-        self.user.save()
+        return attrs    

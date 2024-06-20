@@ -5,7 +5,7 @@ from .views import CustomResetPasswordConfirmView
 urlpatterns = [
     path('create/',CreateList.as_view(),name='create'),
     path('vd/',PostList.as_view(),name='listing'),
-    path('',api_root),
+    path('',api_root,name='apipage'),
     path('vd/<int:pk>/', PostDetail.as_view(),name='create-view'),
     path('users/', UserList.as_view(),name='users-list'),
     path('users/<int:pk>/', UserDetail.as_view(),name='users-listing'),

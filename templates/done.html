@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title %}Account Verification Successful{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card mx-auto mt-5">
+        <div class="card-body text-center">
+            <img src="{% static 'images/verified.png' %}" alt="Verified" class="verified-icon">
+            <h1 class="card-title">Account Verified!</h1>
+            <p class="card-text">Your account has been successfully verified. You can now log in and start using our services.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary">Go to Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

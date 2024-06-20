@@ -1,41 +1,96 @@
 <!-- templates/registration/signup.html -->
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %} 
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<!-- <form method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit">Sign Up</button>
-</form> -->
-<div class="content-section col-md-8 col-md-offset-2">
-  {% for message in messages %}
-            <p> {{message}} </p>
-  {% endfor %}
-  <center>
-  <form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
-    {% csrf_token %}
-    <fieldset class="form-group">
-      <label for="first_name">First Name:</label>
-      <input type="text" id="first_name" name="first_name"><br><br>
-      <label for="last_name">Last Name:</label>
-      <input type="text" id="last_name" name="last_name"><br><br>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username"><br><br>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email"><br><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"><br><br>
-      <label for="confirm_password">Confirm Password:</label>
-      <input type="password" id="confirm_password" name="confirm_password"><br><br>
-    </fieldset>
-   <center>
-    <button style="background: black; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-log-in"></span> Create Account</button>
-  </center>
-  <br/>
-  <sub style="text-align: left;"><a href="{% url 'login' %}" style="text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Already have account, login</a></sub>
-  </form>
-</center>
- </div>
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="Company Logo" src="{% static 'images/company.png' %}"style="height: 30px;">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'homepage' %}">Homepage</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<main>
+
+
+
+
+
+
+  <div class="container">
+    <div class="content-section col-md-8 col-md-offset-2">
+      <center>
+        <form method="POST" style="border: 1px solid black; padding: 3%; border-radius: 1%;">
+          <input type="hidden" name="csrfmiddlewaretoken" value="F6yiI0NGixJG6v2OnxVKJ7UuVbxa1mUnSOHIPFzLs2zmkU1BWTYrj1D85UdcfdqQ">
+          {% csrf_token %}
+          <fieldset class="form-group">
+            <legend>Create Your Account</legend>
+            <!-- Display Errors if Any -->
+            {% if messages %}
+            <div class="alert alert-danger">
+              {% for message in messages %}
+              <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="form-group">
+              <label for="first_name">First Name:</label>
+              <input type="text" id="first_name" name="first_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name:</label>
+              <input type="text" id="last_name" name="last_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="confirm_password">Confirm Password:</label>
+              <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+            </div>
+          </fieldset>
+          <center>
+            <button style="background: black; font-size: 1.5rem; padding: 0.5rem 2rem;" class="btn btn-outline-info" type="submit">
+              <span class="glyphicon glyphicon-log-in"></span> Create Account
+            </button>
+          </center>
+          <br />
+          <sub style="text-align: left;">
+            <a href="{% url 'login' %}" style="text-decoration: none; color: blue;">Already have an account? Login</a>
+          </sub>
+        </form>
+      </center>
+    </div>
+  </div>
+</main>
+
 {% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title %}Homepage{% endblock %}
+
+{% block style-nav %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 10;
+        padding: 10;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+    }
+    .logo {
+        width: 300px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    .login-link {
+        padding: 12px 24px;
+        background-color: #4CAF50;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 25px;
+        font-size: 18px;
+        margin-bottom: 5rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .login-link:hover {
+        background-color: transparent;
+        color: #4CAF50;
+        border-color: #4CAF50;
+    }
+    .footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #333;
+        color: #fff;
+        position: relative;
+
+
+            }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <img src="{% static 'images/company.png' %}" alt="Company Logo" class="logo">
+    <h1>Welcome to Our Video Platform</h1>
+    <p>Discover amazing videos and connect with content creators.</p>
+    <a href="{% url 'login' %}" class="login-link">Login</a>
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+</div>
+
+{% endblock %}

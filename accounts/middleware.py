@@ -1,29 +1,64 @@
-import jwt
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.http import JsonResponse
-from rest_framework import status
+import re
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
 
-User = get_user_model()
-
-class JWTAuthenticationMiddleware:
+class TokenAuthenticationMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.excluded_paths = [
+            re.compile(r'^/auth/login/$'),
+            re.compile(r'^/forgot-password/$'),
+            re.compile(r'^/login/$'),
+            re.compile(r'^/$'),
+            re.compile(r'^/logout/$'),
+            re.compile(r'^/auth/logout/$'),
+            re.compile(r'^/api/v1/vd/\d+/$'),
+            re.compile(r'^/api/v1/vd/.*$'),
+            re.compile(r'^/signup/$'),
+            re.compile(r'^/upload/$'),
+            re.compile(r'/video/\d+/$'), 
+            re.compile(r'^/media/uploads/\d+/$'),
+            re.compile(r'^/home/$'),  
+            re.compile(r'^/dashboard/$'),  
+            re.compile(r'^/home/\d+/$'),
+            re.compile(r'^/media/uploads/video_files/.*$'),
+            re.compile(r'^/super/$'),
+            re.compile(r'^/media/uploads/thumbnails/.*$'),
+            re.compile(r'^/auth/register/$'),
+            re.compile(r'^/admin/login/$'),
+            re.compile(r'^/admin/.*$'),
+            re.compile(r'^/signup/.*$'),
+            re.compile(r'^/auth/check-verification-status/.*$'),
+            re.compile(r'^/api/v1/.*$'),
+            re.compile(r'^/api/v1/reset/confirm/.*$'),
+            re.compile(r'^/auth/verify/MTg/.*$'),
+            re.compile(r'^/api/password_reset/.*$'),
+            re.compile(r'^/reset-password-confirm/.*$'),
+            re.compile(r'^/api/v1/reset/confirm/$'),
+        ]
 
     def __call__(self, request):
-        # Get JWT token from request headers
-        jwt_token = request.headers.get('Authorization', '').split('Bearer ')[-1]
+        if self.should_exclude_path(request.path):
+            return self.get_response(request)
 
-        if jwt_token:
-            try:
-                # Validate JWT token
-                payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
-                user_id = payload['user_id']
-                user = User.objects.get(pk=user_id)
-                request.user = user
-            except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
-                # Token is invalid or expired
-                return JsonResponse({'error': 'Invalid or expired token'}, status=status.HTTP_401_UNAUTHORIZED)
+        # Check for access and refresh tokens in headers or cookies
+        access_token = request.headers.get('Access-Token')
+        refresh_token = request.headers.get('Refresh-Token')
 
+        if not access_token or not refresh_token:
+            access_token = request.COOKIES.get('access_token')
+            refresh_token = request.COOKIES.get('refresh_token')
+
+        # If either token is missing, return a 403 Forbidden response
+        if not access_token or not refresh_token:
+            return HttpResponseForbidden(render(request, '403.html'))
+
+        # Tokens are present, proceed with the request
         response = self.get_response(request)
         return response
+
+    def should_exclude_path(self, path):
+        for pattern in self.excluded_paths:
+            if pattern.match(path):
+                return True
+        return False

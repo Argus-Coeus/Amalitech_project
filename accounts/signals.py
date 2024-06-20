@@ -18,24 +18,10 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     }
 
 
-    #email_plaintext_message = "Open the link to reset your password" + " " + "{}{}".format(instance.request.build_absolute_uri("http://localhost:8000/login#/reset-password-form/"), reset_password_token.key)
-
     # render email text
     email_html_message = render_to_string('registration/password_reset_email.html', context)
     email_plaintext_message = render_to_string('registration/password_reset_email.txt', context)
-    # msg = EmailMultiAlternatives(
-    #     # title:
-    #     "Password Reset for {title}".format(title="Your Website Title"),
-    #     # message:
-    #     email_plaintext_message,
-    #     # from:
-    #     "noreply@yourdomain.com",
-    #     # to:
-    #     [reset_password_token.user.email]
-    # )
-    # msg.attach_alternative(email_html_message, "text/html")
-    # msg.send()
-
+   
     send_mail(
         # title:
         "Password Reset for {title}".format(title="Your Website Title"),

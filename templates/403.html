@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}403 Forbidden{% endblock %}
+
+{% block style-nav %}
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    text-align: center;
+    padding: 50px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.error-message {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.error-message h1 {
+    font-size: 72px;
+    margin: 0;
+}
+.error-message p {
+    font-size: 24px;
+    margin: 20px 0;
+}
+.error-message a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+.error-message a:hover {
+    background-color: #0056b3;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="error-message">
+        <h1>403</h1>
+        <p>Forbidden - You don't have permission to access this page.</p>
+        <a href="{% url 'login' %}">Go to Login</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card mx-auto mt-5">
+        <div class="card-body text-center">
+            <a href="{% url 'login' %}" class="btn btn-primary">Go to Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

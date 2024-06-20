@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title %}Watch Video{% endblock %}
+
+{% block style-nav %}
+<style>
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      color: #f2f2f2;            
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+    
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: white;
+    }
+    
+    .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .video-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio for responsive video */
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .content h3 {
+            font-size: 1.5rem;
+            color: #555;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .content p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .date-posted {
+            font-size: 1rem;
+            color: #888;
+            text-align: center;
+        }
+        #verification-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color:green; /* Default color is red */
+            display: inline-block;
+        margin-top: 15px; /* Adjust the top margin to align with navbar items */
+        margin-left: 10px; /* Adjust the left margin for spacing */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+{% if not request.COOKIES.access or not request.COOKIES.refresh %}
+    {% include '403.html' %}
+{% else %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">
+            <img alt="Company Logo" src="{% static 'images/company.png' %}" style="height: 30px;">
+          </a>
+        </div>
+  
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <div id="verification-circle"></div>
+            <li><div id="verification-circle"></div></li>
+            <li><a href="{% url 'video_list' %}">Dashboard</a></li>
+            <li><a href="{% url 'upload' %}">Upload</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li><a href="{% url 'forgot-password' %}">Forgot Password</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+<p></p>
+
+<div class="container">
+  <div class="video-container">
+      <video controls>
+          <source src="{{ video.Video_file }}" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+  </div>
+  <div class="content">
+      <h2>Watch Video</h2>
+      <h3>{{ video.title }}</h3>
+      <p>{{ video.description }}</p>
+      <p class="date-posted">Posted on: {{ video.date_posted }}</p>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

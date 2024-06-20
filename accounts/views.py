@@ -1,14 +1,31 @@
+import base64
+from venv import logger
+from django.conf import settings
 from django.shortcuts import render, redirect
 import requests
 from django.views import View
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import JsonResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse,HttpResponseRedirect
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from django.urls import reverse_lazy
 from rest_framework import status
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
+
+
+API_URL = 'http://127.0.0.1:8000/api/v1/vd/'  
+
+
+
+
+
+class Homepage(View):
+    def get(self, request):
+        return render(request, 'homepage.html')
 
 
 class LoginView(View): 
@@ -19,37 +36,27 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        api_url = f'http://127.0.0.1:8000/auth/login/'  
+        api_url = f'http://127.0.0.1:8000/auth/login/' 
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
         data = {
               'username': username,
               'password': password,
           }
-        response = requests.post(api_url,data)
+        response = requests.post(api_url,data,headers=headers)
         if response.status_code == status.HTTP_200_OK:
             users = response.json()
-#           print()
-            response = JsonResponse({'access': str(users['access']), 'refresh': str(users['refresh'])})
-            response.set_cookie('access', str(users['access']), httponly=True)
-            response.set_cookie('refresh', str(users['refresh']), httponly=True)
-            
-            if username == "admin" :
-                return render(request, 'admin.html', {'message': 'Hello'})
-            elif username == "api" :
-                return redirect('api')
-            else:
-                return render(request, 'space.html', {'message': 'Hello'})
+            redirect_url = 'admin_list' if username == "admin" else 'video_list'
+                
+            response = HttpResponseRedirect(reverse(redirect_url))
+            response.set_cookie('access', users['access'], httponly=True)
+            response.set_cookie('refresh', users['refresh'], httponly=True)
+            return response
         else:
             return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
-
-class LogoutView(View):
-    def post(self, request):
-        refresh_token = request.COOKIES.get('refresh')
-        token = RefreshToken(refresh_token)
-        token.blacklist()
-        response = redirect('login')
-        response.delete_cookie('access')
-        response.delete_cookie('refresh')
-        return response
+        
 
 
 class SignView(View):
@@ -65,7 +72,10 @@ class SignView(View):
         confirm_password = request.POST.get('confirm_password')
 
         api_url = f'http://127.0.0.1:8000/auth/register/'
-
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
         data = {
             "username": username,
             "password": password,
@@ -76,18 +86,15 @@ class SignView(View):
         }
 
         response = requests.post(api_url,data)
-        print(response.json())
-        print(response.status_code)
-        if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
-            return redirect('login')
+        if response.status_code == status.HTTP_200_OK or response.status_code == 201 :
+            messages.success(request, f'{username} Account created successfully. Please verify in your email.')     
+            return render(request, 'registration/login.html')
         else:
             errors = response.json()
-            for field, message in errors.items():
-                for message in message:
-                    messages.error(request,message)
-            return redirect('register')
-
-
+            for field, messages_list in errors.items():
+                for message in messages_list:
+                    messages.error(request, message)
+            return render(request, 'registration/signup.html')
 
 class ForgotPassword(View):
     def get(self, request):
@@ -97,11 +104,14 @@ class ForgotPassword(View):
     def post(self, request):
         email = request.POST.get('email')
         api_url = f'http://127.0.0.1:8000/api/password_reset/'
-
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
         data = {
             "email": email
         }
-        response = requests.post(api_url,data)
+        response = requests.post(api_url,data,headers=headers)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return render(request, 'registration/password_reset_done.html')
         
@@ -118,8 +128,11 @@ class ForgotPasswordConfirm(View):
             "token" : token
         }
         api_url = f'http://127.0.0.1:8000/api/v1/reset/confirm/'
-        print(api_url)
-        response = requests.post(api_url,data)
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
+        response = requests.post(api_url,data,headers=headers)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return redirect('login')
         
@@ -127,3 +140,106 @@ class ForgotPasswordConfirm(View):
 class Upload(View):
     def get(self, request):
         return render(request, 'upload.html')
+    
+    def post(self, request):
+        author = request.POST.get('author')
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        video_file = request.FILES.get("video")
+        thumbnail = request.FILES['thumbnail']
+        date_posted = request.POST.get('date_posted')
+        
+        data = {
+            "author": 1,
+            "title": title,
+            "description": description,
+            "date_posted": date_posted,
+        }
+
+        files = {
+            "Video_file": video_file,
+            "thumbnail": thumbnail
+        }
+        try:
+            
+            api_url = 'http://127.0.0.1:8000/api/v1/create/'
+            auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+            headers = {
+                'Authorization': f'Basic {auth_credentials}'
+            }
+            response = requests.post(api_url, data=data, headers=headers, files=files)
+            if response.status_code in (200, 201):
+                return redirect('admin_list')
+            else:
+                logger.error(f"Upload Error")
+        finally:
+            video_file.close()
+            thumbnail.close()
+
+        return redirect('upload')  # Fallback redirect in case of failure
+                
+                
+        
+
+
+def admin_list(request):
+    try:
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
+        response = requests.get(API_URL,headers=headers)
+        response.raise_for_status()
+        videos = response.json()
+    except requests.RequestException as e:
+        logger.error(f"Error fetching videos: {e}")
+        videos = []
+    return render(request, 'admin.html', {'videos': videos})
+
+
+def user_list(request):
+    try:
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
+        response = requests.get(API_URL,headers=headers)
+        response.raise_for_status()
+        videos = response.json()
+    except requests.RequestException as e:
+        logger.error(f"Error fetching videos: {e}")
+        videos = []
+    return render(request, 'list.html', {'videos': videos})
+
+def video_detail(request, video_id):
+    try:
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {auth_credentials}'
+        }
+        response = requests.get(f"{API_URL}{video_id}/",headers=headers)
+        response.raise_for_status()
+        video = response.json()
+    except requests.RequestException as e:
+        logger.error(f"Error fetching video details: {e}")
+        raise Http404("Video not found")
+    return render(request, 'detail.html', {'video': video})
+
+
+def logout(request):
+    api_url = 'http://127.0.0.1:8000/auth/logout/'
+
+    token = request.COOKIES.get('refresh')
+    if token:
+        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        headers = {'Content-Type': 'application/json','Authorization': f'Basic {auth_credentials}'}
+        data = {'refresh_token': token}
+        try:
+            response = requests.post(api_url, json=data, headers=headers)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            return HttpResponseBadRequest(f"Error logging out: {e}")
+    response = HttpResponseRedirect(reverse('login'))
+    response.delete_cookie('access')
+    response.delete_cookie('refresh')
+    return response 

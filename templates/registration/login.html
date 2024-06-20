@@ -1,29 +1,74 @@
 <!-- templates/registration/login.html -->
 {% extends "base.html" %}
+{% load static %} 
 {% block title %}Login{% endblock %}
-<fieldset class="form-group">
-</fieldset>
-{% block content %}
-<div class="content-section col-md-8 col-md-offset-2">
-  <center>
-  <form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
-    {% csrf_token %}
-    <fieldset class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
 
-    </fieldset>
-   <center><fieldset class="form-group"></fieldset>
-    <button style="background: black; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-log-in"></span>   login</button>
-  </center>
-  <br/>
-  <sub style="text-align: left;"><a href="{% url 'register' %}" style="text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">don't have account,sign up</a></sub><br/>
-  <sub style="text-align: left;"><a href="{% url 'forgot-password' %}" style="text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Forgot Password</a></sub>
-  </form>
-</center>
- </div>
+{% block content %}
+  <!-- Navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          <img alt="Company Logo" src="{% static 'images/company.png' %}" style="height: 30px;">
+        </a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{% url 'homepage' %}">Home</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <main>
+    <div class="content-section col-md-8 col-md-offset-2">
+       <!-- Display Errors if Any -->
+       {% if messages %}
+       <div class="alert alert-danger">
+         {% for message in messages %}
+         <p>{{ message }}</p>
+         {% endfor %}
+       </div>
+       {% endif %}
+      <center>
+        <form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
+          <input type="hidden" name="csrfmiddlewaretoken" value="neeiO0TiY2U6IGcwQjimAFlOVcsUw8eYAWnIVFFn8xKMW5bjpFl3az4s5V8WKZKr">
+          {% csrf_token %}
+          <fieldset class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" class="form-control"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="form-control"><br>
+          </fieldset>
+          <center>
+            <fieldset class="form-group"></fieldset>
+            <button style="background: black; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit">
+              <span class="glyphicon glyphicon-log-in"></span> login
+            </button>
+          </center>
+          <br />
+          <div class="text-left">
+            <sub>
+              <a href="{% url 'register' %}" class="text-primary" style="text-decoration: none; margin-right: 2%;">Don't have an account? Sign up</a>
+            </sub><br />
+            <sub>
+              <a href="{% url 'forgot-password' %}" class="text-primary" style="text-decoration: none; margin-right: 2%;">Forgot Password?</a>
+            </sub>
+          </div>
+        </form>
+      </center>
+    </div>
+  </main>
+
 {% endblock %}
 
 

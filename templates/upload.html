@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title %}Upload{% endblock %}
+
+
+{% block style-nav %}
+<style>
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+    
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: white;
+    }
+    #verification-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color:green; /* Default color is red */
+            display: inline-block;
+        margin-top: 15px; /* Adjust the top margin to align with navbar items */
+        margin-left: 10px; /* Adjust the left margin for spacing */
+        }
+ 
+</style>
+{% endblock %}
+
+{% block content %}
+{% if not request.COOKIES.access or not request.COOKIES.refresh %}
+    {% include '403.html' %}
+{% else %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="Company Logo" src="{% static 'images/company.png' %}" style="height: 30px;">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><div id="verification-circle"></div></li>
+        <li><a href="{% url 'admin_list' %}">Dashboard</a></li>
+        <li><a href="{% url 'upload' %}">Upload</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+  <p></p>
+  <div class="container">
+    <div class="col-md-8 offset-md-2 form-container">
+        <h2 class="text-center">Upload Your Video</h2>
+        <form method="post"  enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="author">Author:</label>
+              <input type="text" id="author" name="author" class="form-control" value="admin" disabled>
+          </div>
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="video_file">Video File:</label>
+                <input type="file" id="video" name="video" class="form-control-file"  required>
+            </div>
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail:</label>
+                <input type="file" id="thumbnail" name="thumbnail" class="form-control-file"  required>
+            </div>
+            <div class="form-group">
+                <label for="date_posted">Date Posted:</label>
+                <input type="date" id="date_posted" name="date_posted" class="form-control" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-custom">
+                    <span class="glyphicon glyphicon-log-in"></span> Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+ {% endif %}
+{% endblock %}
+

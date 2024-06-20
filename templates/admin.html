@@ -1,105 +1,161 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% load static %} 
+{% block title %}Dashboard{% endblock %}
 
 {% block style-nav %}
 <style>
-    .topnav {
-      overflow: hidden;
-      background-color: #333;
-    }
-    
-    .topnav a {
-      float: left;
-      color: #f2f2f2;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      font-size: 17px;
-    }
-    
-    .topnav a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-    
-    .topnav a.active {
-      background-color: #04AA6D;
-      color: white;
-    }
-    .card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-            margin: 16px auto;
-            width: 300px;
-            display: none;
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-            border-bottom: 1px solid #ccc;
-        }
-        .card h3 {
-            font-size: 1.2em;
-            margin: 0.5em 0;
-        }
-        .card p {
-            margin: 0.5em 0;
-        }
-        .card a {
-            display: block;
-            margin: 0.5em 0;
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .card a:hover {
-            text-decoration: underline;
-        }
-        .card .date-posted {
-            font-size: 0.9em;
-            color: #777;
-        }
-        .navigation {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .navigation button {
-            padding: 10px 20px;
-            margin: 5px;
-        }
-        .message {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-    </style>
+  .topnav {
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin: 16px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .card img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .card h3 {
+    font-size: 1.2em;
+    margin: 0.5em 0;
+  }
+
+  .card p {
+    margin: 0.5em 0;
+  }
+
+  .card a {
+    display: block;
+    margin: 0.5em 0;
+    color: #0066cc;
+    text-decoration: none;
+  }
+
+  .card a:hover {
+    text-decoration: underline;
+  }
+
+  .card .date-posted {
+    font-size: 0.9em;
+    color: #777;
+  }
+
+  .navigation {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .navigation button {
+    padding: 10px 20px;
+    margin: 5px;
+  }
+
+  .message {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+  }
+
+  #verification-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: green;
+    display: inline-block;
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+</style>
 {% endblock %}
 
-
 {% block content %}
-
-{% if user.is_authenticated %}
-  <div class="topnav">
-    <a> Hi {{ user.username }}!</a>
-    <a class="active" href="#home">Home</a>
-    <a href="#contact">Upload</a>
-    <a href="#about">Logout</a>
-    <a href="{% url 'forgot-password' %}">Reset Password</a>
-    <a href="#about">About</a>
-  </div>
-  <p></p>
+{% if not request.COOKIES.access or not request.COOKIES.refresh %}
+    {% include '403.html' %}
 {% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-{% endif %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+              <img alt="Company Logo" src="{% static 'images/company.png' %}" style="height: 30px;">
+            </a>
+          </div>
+    
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><div id="verification-circle"></div></li>
+              <li><a href="{% url 'video_list' %}" >Dashboard</a></li>
+              <li><a href="{% url 'upload' %}">Upload</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+              
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+  <p></p>
+
 <h2>Dashboard</h2>
     <div id="message" class="message"></div>
-    <div id="video-container"></div>
+
+
+    <div id="video-container" class="container-fluid">
+      <div class="row">
+          {% for video in videos %}
+          <div class="col-sm-4">
+              <div class="card">
+                  <img src="{{ video.thumbnail }}" alt="{{ video.title }} thumbnail">
+                  <h3>{{ video.title }}</h3>
+                  <p>{{ video.description }}</p>
+                  <a href="{% url 'video_detail' video.id %}">Watch Video</a>
+                  <p class="date-posted">Posted on: {{ video.date_posted }}</p>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+
+
+        
     <div class="navigation">
         <button id="prev-btn" disabled>Previous</button>
         <button id="next-btn" disabled>Next</button>
     </div>
-   
-{% endblock %}
-
+    {% endif %}
+    {% endblock %}

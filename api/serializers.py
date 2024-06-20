@@ -13,6 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id','author','title', 'description', 'Video_file', 'thumbnail', 'date_posted',)
         model = Video
+        
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
