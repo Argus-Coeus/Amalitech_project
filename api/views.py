@@ -57,7 +57,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CustomResetPasswordConfirmView(ResetPasswordConfirm):
-    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = PasswordTokenSerializer(data=request.data)

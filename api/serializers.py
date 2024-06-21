@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Video
 from django.contrib.auth.models import User
 from .models import Video
-from django.contrib.auth.tokens import default_token_generator
+
 
 
 

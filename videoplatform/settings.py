@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e)_0i5x$a4c1(ehl#w1h=e=v%@z*a^aeu$#$118^d$@f12m_^w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -114,12 +114,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATIC_ROOT = os.path.join(BASE_DIR,'static')
-# STATIC_URL = 'static/'
 
-# #Media Files
-# MEDIA_ROOT  = os.path.join(BASE_DIR,'media')
-# MEDIA_URL = 'media/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
@@ -161,4 +156,4 @@ LOGOUT_API_ENDPOINT = 'http://127.0.0.1:8000/auth/logout/'
 FRONTEND_URL = 'http://127.0.0.1:8000'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
-APPEND_SLASH=False
+APPEND_SLASH=True
