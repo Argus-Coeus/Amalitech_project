@@ -111,10 +111,14 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <div id="verification-circle"></div>
             <li><div id="verification-circle"></div></li>
-            <li><a href="{% url 'video_list' %}">Dashboard</a></li>
+            {% if admin == True %}
+            
+            <li><a href="{% url 'admin_list' %}">Dashboard</a></li>
             <li><a href="{% url 'upload' %}">Upload</a></li>
+            {% else %}
+            <li><a href="{% url 'video_list' %}">Dashboard</a></li>
+            {% endif %}
             <li><a href="{% url 'logout' %}">Logout</a></li>
             <li><a href="{% url 'forgot-password' %}">Forgot Password</a></li>
           </ul>

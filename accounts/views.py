@@ -6,11 +6,10 @@ import requests
 from django.views import View
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from rest_framework.reverse import reverse
-from django.urls import reverse_lazy
 from rest_framework import status
-from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import Http404
+import jwt
 
 
 API_URL = 'http://127.0.0.1:8000/api/v1/vd/'  
@@ -45,6 +44,8 @@ class LoginView(View):
         if response.status_code == status.HTTP_200_OK:
             users = response.json()
             redirect_url = 'admin_list' if username == "admin" else 'video_list'
+            global Admin
+            Admin = True
                 
             response = HttpResponseRedirect(reverse(redirect_url))
             response.set_cookie('access', users['access'], httponly=True)
@@ -135,6 +136,13 @@ class ForgotPasswordConfirm(View):
         response = requests.post(api_url,data,headers=headers)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return redirect('login')
+        else:
+            errors = response.json()
+            for field, messages_list in errors.items():
+                for message in messages_list:
+                    messages.error(request, message)
+            return render(request, 'registration/password_reset_confirm.html', {'error': 'Invalid credentials'})
+        
         
 
 class Upload(View):
@@ -223,7 +231,8 @@ def video_detail(request, video_id):
     except requests.RequestException as e:
         logger.error(f"Error fetching video details: {e}")
         raise Http404("Video not found")
-    return render(request, 'detail.html', {'video': video})
+    return render(request, 'detail.html', {'video': video,"admin":Admin})
+
 
 
 def logout(request):
