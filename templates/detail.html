@@ -86,6 +86,7 @@
         margin-left: 10px; /* Adjust the left margin for spacing */
         }
     </style>
+
 {% endblock %}
 
 {% block content %}
@@ -139,8 +140,35 @@
       <h3>{{ video.title }}</h3>
       <p>{{ video.description }}</p>
       <p class="date-posted">Posted on: {{ video.date_posted }}</p>
+          <!-- Shareable link button -->
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3 text-center">
+                <button id="copy-link-btn" class="btn btn-primary">Copy Video Link</button>
+            </div>
+        </div>
+
+
   </div>
 </div>
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var copyLinkBtn = document.getElementById('copy-link-btn');
+      copyLinkBtn.addEventListener('click', function() {
+          var videoUrl = "{% url 'video_detail' video.id %}"; 
+          copyToClipboard(videoUrl);
+      });
+  
+      function copyToClipboard(text) {
+          var dummyInput = document.createElement('input');
+          document.body.appendChild(dummyInput);
+          dummyInput.setAttribute('value', text);
+          dummyInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(dummyInput);
+          alert('Video link : ' + text);
+      }
+  });
+  </script>
 {% endif %}
 {% endblock %}
