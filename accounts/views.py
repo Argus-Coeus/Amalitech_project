@@ -72,7 +72,7 @@ class SignView(View):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        api_url = f'http://localhost/auth/register/'
+        api_url = f'https://video-platform-app.onrender.com/auth/register/'
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         headers = {
             'Authorization': f'Basic {auth_credentials}'
