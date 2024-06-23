@@ -161,4 +161,4 @@ LOGOUT_API_ENDPOINT = 'http://localhost/auth/logout/'
 FRONTEND_URL = 'http://localhost/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
-APPEND_SLASH=True/static/js/script.js
+APPEND_SLASH=True
