@@ -35,6 +35,9 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/api/password_reset/.*$'),
             re.compile(r'^/reset-password-confirm/.*$'),
             re.compile(r'^/api/v1/reset/confirm/$'),
+            re.compile(r'^api/docs/$'),
+
+            
         ]
 
     def __call__(self, request):
