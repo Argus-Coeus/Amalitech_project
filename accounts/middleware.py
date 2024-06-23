@@ -24,7 +24,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/media/uploads/video_files/.*$'),
             re.compile(r'^/super/$'),
             re.compile(r'^/media/uploads/thumbnails/.*$'),
-            re.compile(r'^/auth/register/.*$'),
+            re.compile(r'^/auth/register/$'),
             re.compile(r'^/admin/login/$'),
             re.compile(r'^/admin/.*$'),
             re.compile(r'^/signup/.*$'),
