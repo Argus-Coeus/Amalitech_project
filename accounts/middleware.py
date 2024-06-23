@@ -39,6 +39,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/static/.*$'),
             re.compile(r'^/opt/render/project/.*$'),
             re.compile(r'^/static/js/.*$'),
+            re.compile(r'^/api/docs/.*$'),
 
             
         ]
