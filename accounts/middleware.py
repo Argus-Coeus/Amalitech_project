@@ -35,7 +35,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/api/password_reset/.*$'),
             re.compile(r'^/reset-password-confirm/.*$'),
             re.compile(r'^/api/v1/reset/confirm/$'),
-            re.compile(r'^api/docs/$'),
+            re.compile(r'^/api/docs/$'),
             re.compile(r'^/static/.*$'),
             re.compile(r'^/opt/render/project/.*$'),
             re.compile(r'^/static/js/.*$'),
