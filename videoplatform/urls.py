@@ -11,4 +11,7 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('api/docs/', include_docs_urls(title='Video API'),name= "docs"),
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG: 
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

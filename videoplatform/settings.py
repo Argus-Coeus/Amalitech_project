@@ -120,6 +120,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
@@ -159,4 +161,4 @@ LOGOUT_API_ENDPOINT = 'http://localhost/auth/logout/'
 FRONTEND_URL = 'http://localhost/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
-APPEND_SLASH=True
+APPEND_SLASH=True/static/js/script.js
