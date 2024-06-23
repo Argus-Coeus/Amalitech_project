@@ -24,7 +24,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/media/uploads/video_files/.*$'),
             re.compile(r'^/super/$'),
             re.compile(r'^/media/uploads/thumbnails/.*$'),
-            re.compile(r'^/auth/register/$'),
+            re.compile(r'^/auth/register/.*$'),
             re.compile(r'^/admin/login/$'),
             re.compile(r'^/admin/.*$'),
             re.compile(r'^/signup/.*$'),
@@ -36,6 +36,9 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/reset-password-confirm/.*$'),
             re.compile(r'^/api/v1/reset/confirm/$'),
             re.compile(r'^api/docs/$'),
+            re.compile(r'^/static/.*$'),
+            re.compile(r'^/opt/render/project/.*$'),
+            re.compile(r'^/static/.*$'),
 
             
         ]
