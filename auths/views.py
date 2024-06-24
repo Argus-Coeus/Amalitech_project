@@ -19,7 +19,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 
 class MyObtainTokenPairView(TokenObtainPairView):
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
 
 
@@ -29,7 +29,7 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -52,7 +52,7 @@ class LogoutView(APIView):
         return LogoutSerializer(*args, **kwargs)
         
 class VerifyAccountView(APIView):
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
 
     def get(self, request, uid, token):
         user = generics.get_object_or_404(User, id=uid)
@@ -66,7 +66,7 @@ class VerifyAccountView(APIView):
 
 
 class VerifyAccountView(APIView):
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
 
     def get(self, request, uid, token):
         try:
