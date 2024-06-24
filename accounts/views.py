@@ -45,7 +45,10 @@ class LoginView(View):
             # print(response.status_code)
             # print(response.json())
             users = response.json()
-            redirect_url = 'admin_list' if username == "admin" else 'video_list'
+            if username == "admin":
+                redirect_url = 'admin_list' 
+            else:
+                redirect_url = 'video_list'
             global Admin
             Admin = True
 
