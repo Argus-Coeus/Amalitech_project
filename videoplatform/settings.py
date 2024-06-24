@@ -170,8 +170,8 @@ EMAIL_HOST_PASSWORD = 'jjnt nwln dnpk asaa'
 EMAIL_USE_SSL = True
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-LOGOUT_API_ENDPOINT = 'http://localhost/auth/logout/'  
-FRONTEND_URL = 'http://localhost/'
+LOGOUT_API_ENDPOINT = 'https://video-platform-app.onrender.com/auth/logout/'  
+FRONTEND_URL = 'https://video-platform-app.onrender.com/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
