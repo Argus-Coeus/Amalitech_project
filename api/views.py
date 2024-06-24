@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def api_root(request, format=None):
     return Response({
         'Create a video ': reverse('create', request=request, format=format),
@@ -31,17 +31,17 @@ def api_root(request, format=None):
 class CreateList(generics.CreateAPIView):
     queryset = Video.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 class PostList(generics.ListAPIView):
     queryset = Video.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
 
 class UserList(generics.ListAPIView):
