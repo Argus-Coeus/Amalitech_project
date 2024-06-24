@@ -42,23 +42,23 @@ class LoginView(View):
           }
         response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201:
-            print(response.status_code)
-            print(response.json())
-            # users = response.json()
-            # redirect_url = 'admin_list' if username == "admin" else 'video_list'
-            # global Admin
-            # Admin = True
+            # print(response.status_code)
+            # print(response.json())
+            users = response.json()
+            redirect_url = 'admin_list' if username == "admin" else 'video_list'
+            global Admin
+            Admin = True
 
-            # response = HttpResponseRedirect(reverse(redirect_url))
-            # response.set_cookie('access', users['access'], httponly=True)
-            # response.set_cookie('refresh', users['refresh'], httponly=True)
+            response = HttpResponseRedirect(redirect(redirect_url))
+            response.set_cookie('access', users['access'], httponly=True)
+            response.set_cookie('refresh', users['refresh'], httponly=True)
             return response
-        # else:
-        #     errors = response.json()
-        #     for field, messages_list in errors.items():
-        #         for message in messages_list:
-        #             messages.error(request, message)
-        #     return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
+        else:
+            errors = response.json()
+            for field, messages_list in errors.items():
+                for message in messages_list:
+                    messages.error(request, message)
+            return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
         
 
 
