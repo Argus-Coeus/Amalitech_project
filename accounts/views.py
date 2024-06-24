@@ -32,26 +32,27 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         api_url = f'https://video-platform-app.onrender.com/auth/login/' 
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
+        # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
+        # headers = {
+        #     'Authorization': f'Basic {auth_credentials}'
+        # }
         data = {
               'username': username,
               'password': password,
           }
-        response = requests.post(api_url,data)
-        print(response)
-        if response.status_code == status.HTTP_200_OK or response.status_code == 201:
-            users = response.json()
-            redirect_url = 'admin_list' if username == "admin" else 'video_list'
-            global Admin
-            Admin = True
+        print(data)
+        # response = requests.post(api_url,data)
+        # print(response)
+        # if response.status_code == status.HTTP_200_OK or response.status_code == 201:
+        #     users = response.json()
+        #     redirect_url = 'admin_list' if username == "admin" else 'video_list'
+        #     global Admin
+        #     Admin = True
 
-            response = HttpResponseRedirect(reverse(redirect_url))
-            response.set_cookie('access', users['access'], httponly=True)
-            response.set_cookie('refresh', users['refresh'], httponly=True)
-            return response
+        #     response = HttpResponseRedirect(reverse(redirect_url))
+        #     response.set_cookie('access', users['access'], httponly=True)
+        #     response.set_cookie('refresh', users['refresh'], httponly=True)
+        #     return response
         else:
             errors = response.json()
             for field, messages_list in errors.items():
