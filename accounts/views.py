@@ -53,12 +53,12 @@ class LoginView(View):
         #     response.set_cookie('access', users['access'], httponly=True)
         #     response.set_cookie('refresh', users['refresh'], httponly=True)
         #     return response
-        else:
-            errors = response.json()
-            for field, messages_list in errors.items():
-                for message in messages_list:
-                    messages.error(request, message)
-            return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
+        # else:
+        #     errors = response.json()
+        #     for field, messages_list in errors.items():
+        #         for message in messages_list:
+        #             messages.error(request, message)
+        #     return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
         
 
 
