@@ -12,7 +12,7 @@ def send_verification_email(user):
     verification_link = f"{settings.FRONTEND_URL}{reverse('verify-account', kwargs={'uid': uid, 'token': token})}"
 
     subject = 'Verify your account'
-    message = render_to_string('verification_email.html', {
+    message = render_to_string('verification_email.txt', {
         'user': user,
         'verification_link': verification_link
     })
