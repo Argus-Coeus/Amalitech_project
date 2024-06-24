@@ -49,7 +49,7 @@ class LoginView(View):
             global Admin
             Admin = True
 
-            response = HttpResponseRedirect(redirect(redirect_url))
+            response = HttpResponseRedirect(reverse(redirect_url))
             response.set_cookie('access', users['access'], httponly=True)
             response.set_cookie('refresh', users['refresh'], httponly=True)
             return response

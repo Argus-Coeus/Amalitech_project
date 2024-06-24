@@ -16,9 +16,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING:homepage don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-
-
+# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = ['.vercel.app','.now.sh','127.0.0.1','localhost']
+ 
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-database_url = os.environ.get("DATABASE_URL")
+database_url = "postgresql://amalitech_user:RpAkwhZB7zfARTOBaDd2MbPlxmghGMIJ@dpg-cprednbqf0us738dnbr0-a.oregon-postgres.render.com/amalitech"
 DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build',"static")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -175,3 +175,4 @@ FRONTEND_URL = 'https://video-platform-app.onrender.com/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
+SECRET_KEY = "kofi"
