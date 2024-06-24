@@ -41,6 +41,7 @@ class LoginView(View):
               'password': password,
           }
         response = requests.post(api_url,data)
+        print(response)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201:
             users = response.json()
             redirect_url = 'admin_list' if username == "admin" else 'video_list'
