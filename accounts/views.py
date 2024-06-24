@@ -40,19 +40,17 @@ class LoginView(View):
               'username': username,
               'password': password,
           }
-        print(data)
-        # response = requests.post(api_url,data)
-        # print(response)
-        # if response.status_code == status.HTTP_200_OK or response.status_code == 201:
-        #     users = response.json()
-        #     redirect_url = 'admin_list' if username == "admin" else 'video_list'
-        #     global Admin
-        #     Admin = True
+        response = requests.post(api_url,data)
+        if response.status_code == status.HTTP_200_OK or response.status_code == 201:
+            users = response.json()
+            redirect_url = 'admin_list' if username == "admin" else 'video_list'
+            global Admin
+            Admin = True
 
-        #     response = HttpResponseRedirect(reverse(redirect_url))
-        #     response.set_cookie('access', users['access'], httponly=True)
-        #     response.set_cookie('refresh', users['refresh'], httponly=True)
-        #     return response
+            response = HttpResponseRedirect(reverse(redirect_url))
+            response.set_cookie('access', users['access'], httponly=True)
+            response.set_cookie('refresh', users['refresh'], httponly=True)
+            return response
         # else:
         #     errors = response.json()
         #     for field, messages_list in errors.items():
