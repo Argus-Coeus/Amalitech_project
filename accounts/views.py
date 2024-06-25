@@ -12,7 +12,7 @@ from django.http import Http404
 import jwt
 
 
-API_URL = 'https://video-platform-app.onrender.com/api/v1/vd/'  
+API_URL = 'https://amalitech-project.vercel.app/api/v1/vd/'  
 
 
 
@@ -31,7 +31,7 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        api_url = f'https://video-platform-app.onrender.com/auth/login/' 
+        api_url = f'https://amalitech-project.vercel.app/auth/login/' 
         # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         # headers = {
         #     'Authorization': f'Basic {auth_credentials}'
@@ -77,7 +77,7 @@ class SignView(View):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        api_url = f'https://video-platform-app.onrender.com/auth/register/'
+        api_url = f'https://amalitech-project.vercel.app/auth/register/'
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         headers = {
             'Authorization': f'Basic {auth_credentials}'
@@ -109,7 +109,7 @@ class ForgotPassword(View):
 
     def post(self, request):
         email = request.POST.get('email')
-        api_url = f'https://video-platform-app.onrender.com/api/password_reset/'
+        api_url = f'https://amalitech-project.vercel.app/api/password_reset/'
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         headers = {
             'Authorization': f'Basic {auth_credentials}'
@@ -133,7 +133,7 @@ class ForgotPasswordConfirm(View):
             "password": password,
             "token" : token
         }
-        api_url = f'https://video-platform-app.onrender.com/api/v1/reset/confirm/'
+        api_url = f'https://amalitech-project.vercel.app/api/v1/reset/confirm/'
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         headers = {
             'Authorization': f'Basic {auth_credentials}'
@@ -175,7 +175,7 @@ class Upload(View):
         }
         try:
             
-            api_url = 'https://video-platform-app.onrender.com/api/v1/create/'
+            api_url = 'https://amalitech-project.vercel.app/api/v1/create/'
             auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
             headers = {
                 'Authorization': f'Basic {auth_credentials}'
@@ -241,7 +241,7 @@ def video_detail(request, video_id):
 
 
 def logout(request):
-    api_url = 'https://video-platform-app.onrender.com/auth/logout/'
+    api_url = 'https://amalitech-project.vercel.app/auth/logout/'
 
     token = request.COOKIES.get('refresh')
     if token:
