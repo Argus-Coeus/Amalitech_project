@@ -1,19 +1,13 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "vc__handler__python.py",
-        "use": "@vercel/python"
-      },
-      {
-        "src": "videoplatform/urls.py",
-        "use": "@vercel/python"
-      }
-    ],
+    "builds": [{
+        "src": "videoplatform/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/vc__handler__python.py"
-      }
+        {
+            "src": "/(.*)",
+            "dest": "videoplatform/wsgi.py"
+        }
     ]
-  }
+}
