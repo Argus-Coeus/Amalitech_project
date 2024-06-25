@@ -170,8 +170,8 @@ EMAIL_HOST_PASSWORD = 'jjnt nwln dnpk asaa'
 EMAIL_USE_SSL = True
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-LOGOUT_API_ENDPOINT = 'http://127.0.0.1:8000/auth/logout/'  
-FRONTEND_URL = 'http://127.0.0.1:8000/'
+LOGOUT_API_ENDPOINT = 'http://127.0.0.1:10000/auth/logout/'  
+FRONTEND_URL = 'http://127.0.0.1:10000/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
