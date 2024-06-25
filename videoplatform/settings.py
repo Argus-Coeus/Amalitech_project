@@ -11,13 +11,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e)_0i5x$a4c1(ehl#w1h=e=v%@z*a^aeu$#$118^d$@f12m_^w'
-# SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = 'django-insecure-e)_0i5x$a4c1(ehl#w1h=e=v%@z*a^aeu$#$118^d$@f12m_^w'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING:homepage don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() == "true"
 # DEBUG = True
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = ['127.0.0.1']
  
 # Application definition
 
@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-database_url = "postgresql://amalitech_user:RpAkwhZB7zfARTOBaDd2MbPlxmghGMIJ@dpg-cprednbqf0us738dnbr0-a.oregon-postgres.render.com/amalitech"
+database_url = os.environ.get("DATABASE_URL")
 DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
@@ -170,8 +170,8 @@ EMAIL_HOST_PASSWORD = 'jjnt nwln dnpk asaa'
 EMAIL_USE_SSL = True
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-LOGOUT_API_ENDPOINT = 'https://amalitech-project.vercel.app/auth/logout/'  
-FRONTEND_URL = 'https://amalitech-project.vercel.app/'
+LOGOUT_API_ENDPOINT = 'http://127.0.0.1:8000/auth/logout/'  
+FRONTEND_URL = 'http://127.0.0.1:8000/'
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True

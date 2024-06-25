@@ -12,7 +12,7 @@ from django.http import Http404
 import jwt
 
 
-API_URL = 'https://amalitech-project.vercel.app/api/v1/vd/'  
+API_URL = 'http://127.0.0.1:8000/api/v1/vd/'  
 
 
 
@@ -31,7 +31,7 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        api_url = f'https://amalitech-project.vercel.app/auth/login/' 
+        api_url = f'http://127.0.0.1:8000/auth/login/' 
         # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         # headers = {
         #     'Authorization': f'Basic {auth_credentials}'
@@ -77,11 +77,7 @@ class SignView(View):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        api_url = f'https://amalitech-project.vercel.app/auth/register/'
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
+        api_url = f'http://127.0.0.1:8000/auth/register/'
         data = {
             "username": username,
             "password": password,
@@ -91,7 +87,7 @@ class SignView(View):
             "last_name": last_name
         }
 
-        response = requests.post(api_url,data,headers=headers)
+        response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :
             messages.success(request, f'{username} account created successfully. Verify your {email} account before you can login.')
             return render(request, 'registration/login.html')
@@ -109,15 +105,11 @@ class ForgotPassword(View):
 
     def post(self, request):
         email = request.POST.get('email')
-        api_url = f'https://amalitech-project.vercel.app/api/password_reset/'
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
+        api_url = f'http://127.0.0.1:8000/api/password_reset/'
         data = {
             "email": email
         }
-        response = requests.post(api_url,data,headers=headers)
+        response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return render(request, 'registration/password_reset_done.html')
         
@@ -133,12 +125,8 @@ class ForgotPasswordConfirm(View):
             "password": password,
             "token" : token
         }
-        api_url = f'https://amalitech-project.vercel.app/api/v1/reset/confirm/'
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
-        response = requests.post(api_url,data,headers=headers)
+        api_url = f'http://127.0.0.1:8000/api/v1/reset/confirm/'
+        response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return redirect('login')
         else:
@@ -175,12 +163,8 @@ class Upload(View):
         }
         try:
             
-            api_url = 'https://amalitech-project.vercel.app/api/v1/create/'
-            auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-            headers = {
-                'Authorization': f'Basic {auth_credentials}'
-            }
-            response = requests.post(api_url, data=data, headers=headers, files=files)
+            api_url = 'http://127.0.0.1:8000/api/v1/create/'
+            response = requests.post(api_url, data=data, files=files)
             if response.status_code in (200, 201):
                 return redirect('admin_list')
             else:
@@ -197,11 +181,7 @@ class Upload(View):
 
 def admin_list(request):
     try:
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
-        response = requests.get(API_URL,headers=headers)
+        response = requests.get(API_URL)
         response.raise_for_status()
         videos = response.json()
     except requests.RequestException as e:
@@ -212,11 +192,7 @@ def admin_list(request):
 
 def user_list(request):
     try:
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
-        response = requests.get(API_URL,headers=headers)
+        response = requests.get(API_URL)
         response.raise_for_status()
         videos = response.json()
     except requests.RequestException as e:
@@ -227,10 +203,8 @@ def user_list(request):
 def video_detail(request, video_id):
     try:
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {
-            'Authorization': f'Basic {auth_credentials}'
-        }
-        response = requests.get(f"{API_URL}{video_id}/",headers=headers)
+    
+        response = requests.get(f"{API_URL}{video_id}/")
         response.raise_for_status()
         video = response.json()
     except requests.RequestException as e:
@@ -241,7 +215,7 @@ def video_detail(request, video_id):
 
 
 def logout(request):
-    api_url = 'https://amalitech-project.vercel.app/auth/logout/'
+    api_url = 'http://127.0.0.1:8000/auth/logout/'
 
     token = request.COOKIES.get('refresh')
     if token:
@@ -249,7 +223,7 @@ def logout(request):
         headers = {'Content-Type': 'application/json','Authorization': f'Basic {auth_credentials}'}
         data = {'refresh_token': token}
         try:
-            response = requests.post(api_url, json=data, headers=headers)
+            response = requests.post(api_url, json=data)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             return HttpResponseBadRequest(f"Error logging out: {e}")

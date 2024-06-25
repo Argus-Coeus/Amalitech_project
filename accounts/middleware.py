@@ -41,6 +41,7 @@ class TokenAuthenticationMiddleware:
             re.compile(r'^/static/js/.*$'),
             re.compile(r'^/api/docs/.*$'),
             re.compile(r'^/auth/verify/.*/.*$'),
+            re.compile(r'^/favicon.ico$'),
 
             
         ]
