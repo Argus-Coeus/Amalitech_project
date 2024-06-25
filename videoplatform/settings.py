@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
-    'accounts',delete my project
+    'accounts',
     'auths',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',
