@@ -19,6 +19,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 
 class MyObtainTokenPairView(TokenObtainPairView):
+    queryset = User.objects.all()
     # permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
 
