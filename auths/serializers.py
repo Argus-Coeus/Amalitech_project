@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    email_field = get_user_model().EMAIL_FIELD   
+    username_field = get_user_model().EMAIL_FIELD   
 
     @classmethod
     def get_token(cls, user):
@@ -24,8 +24,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         return token
 
-    def validate(self, attrs,email_field):
-        email = attrs.get(email_field)
+    def validate(self, attrs,username_field):
+        email = attrs.get(username_field)
         password = attrs.get('password')
 
         # Authenticate user based on email and password
