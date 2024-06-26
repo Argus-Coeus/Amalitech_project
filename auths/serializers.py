@@ -14,6 +14,9 @@ from api.models import Profile
 from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
+
+User = get_user_model()
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = User.EMAIL_FIELD   
 
@@ -27,11 +30,22 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         email = attrs.get(self.username_field)
         password = attrs.get('password')
+         # Check if both email and password are provided
+        if not email or not password:
+            raise serializers.ValidationError("Both email and password are required.")
 
-        user = authenticate(request=self.context.get('request'), email=email, password=password)
+        # Check if both email and password are provided
+        if not email or not password:
+            raise serializers.ValidationError("Both email and password are required.")
 
-        if user is None:
+        try:
+            # Check if the user with the provided email exists
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
             raise serializers.ValidationError("Invalid credentials.")
+
+        # Authenticate user based on email and password
+        user = authenticate(email=email, password=password)
 
         if not user.profile.is_verified:
             raise serializers.ValidationError("Account is not verified.")
