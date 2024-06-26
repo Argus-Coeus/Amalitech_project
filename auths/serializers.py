@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from package.django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
@@ -14,6 +15,7 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = get_user_model().EMAIL_FIELD   
 
     @classmethod
     def get_token(cls, user):
