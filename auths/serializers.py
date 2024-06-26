@@ -28,39 +28,23 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        email = attrs.get(self.username_field)
-        password = attrs.get('password')
-         # Check if both email and password are provided
-        if not email or not password:
-            raise serializers.ValidationError("Both email and password are required.")
-
-        # Check if both email and password are provided
-        if not email or not password:
-            raise serializers.ValidationError("Both email and password are required.")
-
-        try:
-            # Check if the user with the provided email exists
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+        user = authenticate(username_field=attrs['email'], password=attrs['password'])
+        if user is not None:
+            if not user.profile.is_verified:
+                raise serializers.ValidationError("Account is not verified.")
+        else:
             raise serializers.ValidationError("Invalid credentials.")
 
-        # Authenticate user based on email and password
-        user = authenticate(email=email, password=password)
-
-        if not user.profile.is_verified:
-            raise serializers.ValidationError("Account is not verified.")
-
-        # Call parent's validate method to obtain tokens
         data = super().validate(attrs)
         refresh_token = data.get('refresh')
 
-        # Check if refresh token is valid and not blacklisted
         if refresh_token:
             try:
                 token = RefreshToken(refresh_token)
                 token.check_blacklist()
-            except RefreshToken.DoesNotExist:
-                raise serializers.ValidationError("Token is blacklisted or invalid.")
+            except InvalidToken:
+                raise TokenError("Token is blacklisted or invalid")
+
 
         return data
 
