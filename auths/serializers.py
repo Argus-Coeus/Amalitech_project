@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = get_user_model().EMAIL_FIELD   
+    # username_field = get_user_model().EMAIL_FIELD   
 
     @classmethod
     def get_token(cls, user):
@@ -25,22 +25,31 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        user = authenticate(email=attrs['email'], password=attrs['password'])
-        if user is not None:
-            if not user.profile.is_verified:
-                raise serializers.ValidationError("Account is not verified.")
-        else:
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        # Authenticate user based on email and password
+        user = authenticate(email=email, password=password)
+
+        if user is None:
             raise serializers.ValidationError("Invalid credentials.")
 
+        if not user.profile.is_verified:
+            raise serializers.ValidationError("Account is not verified.")
+
+        # Call parent's validate method to obtain tokens
         data = super().validate(attrs)
         refresh_token = data.get('refresh')
 
+        # Check if refresh token is valid and not blacklisted
         if refresh_token:
             try:
                 token = RefreshToken(refresh_token)
                 token.check_blacklist()
-            except InvalidToken:
-                raise TokenError("Token is blacklisted or invalid")
+            except RefreshToken.DoesNotExist:
+                raise serializers.ValidationError("Token is blacklisted or invalid.")
+
+        return data
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
