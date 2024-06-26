@@ -1,4 +1,4 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import PasswordField, TokenObtainPairSerializer
 from package.django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -15,10 +15,16 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 
-User = get_user_model()
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = User.EMAIL_FIELD   
+    username_field = get_user_model().EMAIL_FIELD   
+    
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.fields[self.username_field] = serializers.CharField(write_only=True)
+        self.fields["password"] = PasswordField()
+
 
     @classmethod
     def get_token(cls, user):
