@@ -29,7 +29,7 @@ class LoginView(View):
         return render(request, 'registration/login.html')
 
     def post(self, request):
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         api_url = f'http://127.0.0.1:10000/auth/login/' 
         # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
@@ -37,7 +37,7 @@ class LoginView(View):
         #     'Authorization': f'Basic {auth_credentials}'
         # }
         data = {
-              'username': username,
+              'email': email,
               'password': password,
           }
         response = requests.post(api_url,data)
@@ -45,7 +45,7 @@ class LoginView(View):
             # print(response.status_code)
             # print(response.json())
             users = response.json()
-            if username == "admin":
+            if email == "karthur0822@gmail.com":
                 redirect_url = 'admin_list' 
             else:
                 redirect_url = 'video_list'

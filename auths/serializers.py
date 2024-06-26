@@ -17,11 +17,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-        token['username'] = user.username
+        token['email'] = user.email
         return token
 
     def validate(self, attrs):
-        user = authenticate(username=attrs['username'], password=attrs['password'])
+        user = authenticate(username=attrs['email'], password=attrs['password'])
         if user is not None:
             if not user.profile.is_verified:
                 raise serializers.ValidationError("Account is not verified.")
