@@ -175,4 +175,4 @@ FRONTEND_URL = os.environ.get("FRONTEND_URL")
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
-SECRET_KEY = os.environ.get("SECRET_KEY")#"kofi"
+SECRET_KEY = os.environ.get("SECRET")
