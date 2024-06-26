@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = get_user_model().EMAIL_FIELD   
+    username_field = User.EMAIL_FIELD   
 
     @classmethod
     def get_token(cls, user):
