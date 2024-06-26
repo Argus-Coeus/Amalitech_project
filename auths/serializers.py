@@ -28,8 +28,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         email = attrs.get(self.username_field)
         password = attrs.get('password')
 
-        # Authenticate user based on email and password
-        user = authenticate(email=email, password=password)
+        user = authenticate(request=self.context.get('request'), email=email, password=password)
 
         if user is None:
             raise serializers.ValidationError("Invalid credentials.")
