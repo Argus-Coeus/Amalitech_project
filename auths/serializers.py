@@ -14,31 +14,39 @@ from django.contrib.auth import authenticate
 from .utils import send_verification_email
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
     @classmethod
     def get_token(cls, user):
-        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token = super().get_token(user)
+        # Add custom claim to the token
         token['email'] = user.email
         return token
 
     def validate(self, attrs):
-        user = authenticate(email=attrs['email'], password=attrs['password'])
-        if user is not None:
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if email and password:
+            user = authenticate(request=self.context.get('request'), username=email, password=password)
+
+            if not user:
+                raise serializers.ValidationError(_('Invalid credentials.'))
             if not user.profile.is_verified:
-                raise serializers.ValidationError("Account is not verified.")
+                raise serializers.ValidationError(_('Account is not verified.'))
+
+            data = super().validate(attrs)
+            refresh_token = data.get('refresh')
+
+            if refresh_token:
+                try:
+                    token = RefreshToken(refresh_token)
+                    token.check_blacklist()
+                except InvalidToken:
+                    raise serializers.ValidationError(_('Token is blacklisted or invalid.'))
+
+            return data
         else:
-            raise serializers.ValidationError("Invalid credentials.")
-
-        data = super().validate(attrs)
-        refresh_token = data.get('refresh')
-
-        if refresh_token:
-            try:
-                token = RefreshToken(refresh_token)
-                token.check_blacklist()
-            except InvalidToken:
-                raise TokenError("Token is blacklisted or invalid")
-
-        return data
+            raise serializers.ValidationError(_('Must include "email" and "password".'))
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
