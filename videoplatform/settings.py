@@ -162,17 +162,17 @@ SIMPLE_JWT = {
 # Email Backend Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
 
-EMAIL_PORT = 465  # Replace with your email port
-EMAIL_USE_TLS = False  # Set to False if your email server doesn't use TLS
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
-EMAIL_HOST_USER = 'karthur0822@gmail.com'  # Replace with your email username
-EMAIL_HOST_PASSWORD = 'jjnt nwln dnpk asaa'
+EMAIL_PORT = 465  
+EMAIL_USE_TLS = False  
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_HOST_USER = os.environ.get("EMAIL")
+EMAIL_HOST_PASSWORD = os.environ.get("SMTP_PASSWORD")
 EMAIL_USE_SSL = True
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
-LOGOUT_API_ENDPOINT = 'http://127.0.0.1:10000/auth/logout/'  
-FRONTEND_URL = 'http://127.0.0.1:10000/'
+LOGOUT_API_ENDPOINT = os.environ.get("LOGOUT_API_ENDPOINT") 
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
 # to disable the check
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
-SECRET_KEY = "kofi"
+SECRET_KEY = os.environ.get("SECRET_KEY")#"kofi"
