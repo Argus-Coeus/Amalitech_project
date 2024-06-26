@@ -25,7 +25,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        user = authenticate(username=attrs['email'], password=attrs['password'])
+        user = authenticate(email=attrs['email'], password=attrs['password'])
         if user is not None:
             if not user.profile.is_verified:
                 raise serializers.ValidationError("Account is not verified.")
