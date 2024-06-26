@@ -25,7 +25,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs,username_field):
-        email = attrs.get(username_field)
+        email = attrs.get(self.username_field)
         password = attrs.get('password')
 
         # Authenticate user based on email and password
