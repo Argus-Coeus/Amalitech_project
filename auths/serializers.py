@@ -30,9 +30,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             user = authenticate(request=self.context.get('request'), username=email, password=password)
 
             if not user:
-                raise serializers.ValidationError(_('Invalid credentials.'))
+                raise serializers.ValidationError('Invalid credentials.')
             if not user.profile.is_verified:
-                raise serializers.ValidationError(_('Account is not verified.'))
+                raise serializers.ValidationError('Account is not verified.')
 
             data = super().validate(attrs)
             refresh_token = data.get('refresh')
@@ -42,11 +42,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
                     token = RefreshToken(refresh_token)
                     token.check_blacklist()
                 except InvalidToken:
-                    raise serializers.ValidationError(_('Token is blacklisted or invalid.'))
+                    raise serializers.ValidationError('Token is blacklisted or invalid.')
 
             return data
         else:
-            raise serializers.ValidationError(_('Must include "email" and "password".'))
+            raise serializers.ValidationError('Must include "email" and "password".')
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
