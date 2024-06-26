@@ -219,8 +219,6 @@ def logout(request):
 
     token = request.COOKIES.get('refresh')
     if token:
-        auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
-        headers = {'Content-Type': 'application/json','Authorization': f'Basic {auth_credentials}'}
         data = {'refresh_token': token}
         try:
             response = requests.post(api_url, json=data)

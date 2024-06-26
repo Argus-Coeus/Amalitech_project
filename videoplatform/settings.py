@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-database_url = os.environ.get("DATABASE_URL")
+database_url = "postgresql://amalitech_user:RpAkwhZB7zfARTOBaDd2MbPlxmghGMIJ@dpg-cprednbqf0us738dnbr0-a.oregon-postgres.render.com/amalitech"
 DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
