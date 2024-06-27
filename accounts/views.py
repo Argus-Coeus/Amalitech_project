@@ -228,6 +228,7 @@ def logout(request):
         except requests.exceptions.RequestException as e:
             return HttpResponseBadRequest(f"Error logging out: {e}")
     response = HttpResponseRedirect(reverse('login'))
+    response.delete_cookie('detail')
     response.delete_cookie('access')
     response.delete_cookie('refresh')
     return response 
