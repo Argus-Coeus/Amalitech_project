@@ -201,7 +201,7 @@ def user_list(request):
         videos = []
     return render(request, 'list.html', {'videos': videos})
 
-def video_detail(request, video_id,Admin):
+def video_detail(request, video_id):
     try:
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
     
