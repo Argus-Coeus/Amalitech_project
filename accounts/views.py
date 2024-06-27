@@ -13,7 +13,7 @@ import jwt
 
 
 API_URL = f'{settings.FRONTEND_URL}/api/v1/vd/'  
-
+Admin = False
 
 
 
@@ -47,7 +47,7 @@ class LoginView(View):
             users = response.json()
             if username == "arguscoeus":
                 redirect_url = 'admin_list' 
-                global Admin
+                
                 Admin = True
             else:
                 redirect_url = 'video_list'
