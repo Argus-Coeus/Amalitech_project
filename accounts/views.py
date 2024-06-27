@@ -212,7 +212,7 @@ def video_detail(request, video_id):
     except requests.RequestException as e:
         logger.error(f"Error fetching video details: {e}")
         raise Http404("Video not found")
-    return render(request, 'detail.html', {'video': video,"admin":Admin})
+    return render(request, 'detail.html', {'video': video})
 
 
 
