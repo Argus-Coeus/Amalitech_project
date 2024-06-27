@@ -29,7 +29,7 @@ class LoginView(View):
         return render(request, 'registration/login.html')
 
     def post(self, request):
-        email = request.POST.get('username')
+        username = request.POST.get('username')
         password = request.POST.get('password')
         api_url = f'{settings.FRONTEND_URL}/auth/login/' 
         # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
@@ -37,7 +37,7 @@ class LoginView(View):
         #     'Authorization': f'Basic {auth_credentials}'
         # }
         data = {
-              'email': email,
+              'username': username,
               'password': password,
           }
         response = requests.post(api_url,data)
