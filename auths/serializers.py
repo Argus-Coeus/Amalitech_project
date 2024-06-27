@@ -17,24 +17,14 @@ from .utils import send_verification_email
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = get_user_model().EMAIL_FIELD   
-    
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-        self.fields[self.username_field] = serializers.CharField(write_only=True)
-        self.fields["password"] = PasswordField()
-
-
     @classmethod
     def get_token(cls, user):
-        token = super().get_token(user)
-        # Add custom claim to the token
-        token['email'] = user.email
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token['username'] = user.username
         return token
 
     def validate(self, attrs):
-        user = authenticate(username_field=attrs['email'], password=attrs['password'])
+        user = authenticate(username=attrs['username'], password=attrs['password'])
         if user is not None:
             if not user.profile.is_verified:
                 raise serializers.ValidationError("Account is not verified.")
@@ -50,7 +40,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
                 token.check_blacklist()
             except InvalidToken:
                 raise TokenError("Token is blacklisted or invalid")
-
 
         return data
 
