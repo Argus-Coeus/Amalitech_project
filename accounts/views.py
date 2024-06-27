@@ -45,7 +45,7 @@ class LoginView(View):
             # print(response.status_code)
             # print(response.json())
             users = response.json()
-            if email == "karthur0822@gmail.com":
+            if username == "arguscoeus":
                 redirect_url = 'admin_list' 
             else:
                 redirect_url = 'video_list'
