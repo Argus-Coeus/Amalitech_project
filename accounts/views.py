@@ -47,10 +47,11 @@ class LoginView(View):
             users = response.json()
             if username == "arguscoeus":
                 redirect_url = 'admin_list' 
+                global Admin
+                Admin = True
             else:
                 redirect_url = 'video_list'
-            global Admin
-            Admin = True
+            
 
             response = HttpResponseRedirect(reverse(redirect_url))
             response.set_cookie('access', users['access'], httponly=True)
@@ -200,7 +201,7 @@ def user_list(request):
         videos = []
     return render(request, 'list.html', {'videos': videos})
 
-def video_detail(request, video_id):
+def video_detail(request, video_id,Admin):
     try:
         auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
     
