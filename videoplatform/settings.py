@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',
     'django_rest_passwordreset',
+    'storages',
     
 ]
 
@@ -134,19 +135,16 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
-
-
-
-
+DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+AWS_S3_ACCESS_KEY_ID = os.environ.get("ACCESS_KEY_ID")
+AWS_S3_SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("STORAGE_BUCKET_NAME")
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = False
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
