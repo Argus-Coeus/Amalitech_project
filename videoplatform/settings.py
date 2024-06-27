@@ -135,11 +135,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 STORAGES = {
+    "default": {"BACKEND": "storages.backends.s3.S3Storage"},
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
 AWS_S3_ACCESS_KEY_ID = os.environ.get("ACCESS_KEY_ID")
 AWS_S3_SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("STORAGE_BUCKET_NAME")
