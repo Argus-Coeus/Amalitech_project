@@ -31,7 +31,7 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        api_url = f'https://{settings.FRONTEND_URL}/auth/login/' 
+        api_url = f'{settings.FRONTEND_URL}/auth/login/' 
         # auth_credentials = base64.b64encode(b'admin:admin').decode('utf-8')
         # headers = {
         #     'Authorization': f'Basic {auth_credentials}'
@@ -77,7 +77,7 @@ class SignView(View):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        api_url = f'https://{settings.FRONTEND_URL}/auth/register/'
+        api_url = f'{settings.FRONTEND_URL}/auth/register/'
         data = {
             "username": username,
             "password": password,
@@ -105,7 +105,7 @@ class ForgotPassword(View):
 
     def post(self, request):
         email = request.POST.get('email')
-        api_url = f'https://{settings.FRONTEND_URL}/api/password_reset/'
+        api_url = f'{settings.FRONTEND_URL}/api/password_reset/'
         data = {
             "email": email
         }
@@ -125,7 +125,7 @@ class ForgotPasswordConfirm(View):
             "password": password,
             "token" : token
         }
-        api_url = f'https://{settings.FRONTEND_URL}/api/v1/reset/confirm/'
+        api_url = f'{settings.FRONTEND_URL}/api/v1/reset/confirm/'
         response = requests.post(api_url,data)
         if response.status_code == status.HTTP_200_OK or response.status_code == 201 :     
             return redirect('login')
@@ -163,7 +163,7 @@ class Upload(View):
         }
         try:
             
-            api_url = 'https://{settings.FRONTEND_URL}/api/v1/create/'
+            api_url = f'{settings.FRONTEND_URL}/api/v1/create/'
             response = requests.post(api_url, data=data, files=files)
             if response.status_code in (200, 201):
                 return redirect('admin_list')
@@ -215,7 +215,7 @@ def video_detail(request, video_id):
 
 
 def logout(request):
-    api_url = 'https://{settings.FRONTEND_URL}/auth/logout/'
+    api_url = f'{settings.FRONTEND_URL}/auth/logout/'
 
     token = request.COOKIES.get('refresh')
     if token:
