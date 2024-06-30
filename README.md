@@ -57,9 +57,7 @@ Implement Git flow with detailed commits.
 Include a comprehensive README file.
 ```
 ##### ER Diagram
-```
-
-```
+![alt text](https://amalitech-bucket.s3.eu-north-1.amazonaws.com/uploads/Untitled.png)
 
 ##### Deployed Link
 ```
