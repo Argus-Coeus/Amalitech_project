@@ -178,4 +178,4 @@ FRONTEND_URL = os.environ.get("FRONTEND_URL")
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5242880
 APPEND_SLASH=True
 SECRET_KEY = os.environ.get("SECRET")
-RENDER_URL = os.environ.get("RENDER_URL")
+RENDER_URL = "https://amalitech-project-pwkr.onrender.com"
